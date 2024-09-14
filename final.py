@@ -21,6 +21,11 @@ def process_pdf_from_url(pdf_url):
     # Replace with your actual API key
     # with open('config.json', 'r') as file:
     #     data = json.load(file)
+
+    # Create the Output directory if it doesn't exist
+    if not os.path.exists('Output'):
+        os.makedirs('Output')
+    
     GEMINI_API_KEY = os.environ.get('GEMINI_KEY')
     google_service_base64 = os.environ.get('GOOGLE_SERVICE_BASE64')
     if google_service_base64:
