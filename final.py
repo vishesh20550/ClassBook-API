@@ -53,7 +53,7 @@ def process_pdf_from_id(pdf_id):
     pdf_filename = f'class_pdfs/{pdf_id}'
     pdf_blob = firebase_bucket.blob(pdf_filename)
     if not pdf_blob.exists():
-        print(f"PDF with ID {pdf_id} does not exist in Firebase Storage.")
+        print(f"PDF with ID {pdf_filename} does not exist in Firebase Storage.")
         return None
 
     pdf_content = pdf_blob.download_as_bytes()
