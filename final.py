@@ -17,7 +17,7 @@ def process_pdf_from_id(pdf_id):
     # Load API keys and credentials from environment variables
     GEMINI_API_KEY = os.environ.get('GEMINI_KEY')
     GOOGLE_SERVICE_BASE64 = os.environ.get('GOOGLE_SERVICE_BASE64')
-    # FIREBASE_CREDENTIALS_BASE64 = os.environ.get('FIREBASE_CREDENTIALS_BASE64')
+    FIREBASE_CREDENTIALS_BASE64 = os.environ.get('FIREBASE_CREDENTIALS_BASE64')
     FIREBASE_STORAGE_BUCKET = os.environ.get('FIREBASE_STORAGE_BUCKET')  # e.g., 'your-app.appspot.com'
 
     if not GEMINI_API_KEY:
@@ -26,8 +26,8 @@ def process_pdf_from_id(pdf_id):
     if not GOOGLE_SERVICE_BASE64:
         raise EnvironmentError('GOOGLE_SERVICE_BASE64 environment variable not found')
 
-    # if not FIREBASE_CREDENTIALS_BASE64:
-    #     raise EnvironmentError('FIREBASE_CREDENTIALS_BASE64 environment variable not found')
+    if not FIREBASE_CREDENTIALS_BASE64:
+        raise EnvironmentError('FIREBASE_CREDENTIALS_BASE64 environment variable not found')
 
     if not FIREBASE_STORAGE_BUCKET:
         raise EnvironmentError('FIREBASE_STORAGE_BUCKET environment variable not found')
@@ -38,9 +38,9 @@ def process_pdf_from_id(pdf_id):
     credentials_gc = service_account.Credentials.from_service_account_info(service_account_info)
 
     # Initialize Firebase Admin SDK
-    # firebase_creds_content = base64.b64decode(FIREBASE_CREDENTIALS_BASE64)
-    # firebase_creds = json.loads(firebase_creds_content)
-    cred = credentials.Certificate(service_account_info)
+    firebase_creds_content = base64.b64decode(FIREBASE_CREDENTIALS_BASE64)
+    firebase_creds = json.loads(firebase_creds_content)
+    cred = credentials.Certificate(firebase_creds)
     if not firebase_admin._apps:
         firebase_admin.initialize_app(cred, {'storageBucket': FIREBASE_STORAGE_BUCKET})
 
