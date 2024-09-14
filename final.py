@@ -1,5 +1,6 @@
 import google.generativeai as genai
 from google.oauth2 import service_account
+import base64
 from google.cloud import vision_v1
 from google.cloud import storage
 import json
