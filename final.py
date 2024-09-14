@@ -17,7 +17,7 @@ def process_pdf_from_id(pdf_id):
     # Load API keys and credentials from environment variables
     GEMINI_API_KEY = os.environ.get('GEMINI_KEY')
     GOOGLE_SERVICE_BASE64 = os.environ.get('GOOGLE_SERVICE_BASE64')
-    FIREBASE_CREDENTIALS_BASE64 = os.environ.get('FIREBASE_CREDENTIALS_BASE64')
+    # FIREBASE_CREDENTIALS_BASE64 = os.environ.get('FIREBASE_CREDENTIALS_BASE64')
     FIREBASE_STORAGE_BUCKET = os.environ.get('FIREBASE_STORAGE_BUCKET')  # e.g., 'your-app.appspot.com'
 
     if not GEMINI_API_KEY:
@@ -26,8 +26,8 @@ def process_pdf_from_id(pdf_id):
     if not GOOGLE_SERVICE_BASE64:
         raise EnvironmentError('GOOGLE_SERVICE_BASE64 environment variable not found')
 
-    if not FIREBASE_CREDENTIALS_BASE64:
-        raise EnvironmentError('FIREBASE_CREDENTIALS_BASE64 environment variable not found')
+    # if not FIREBASE_CREDENTIALS_BASE64:
+    #     raise EnvironmentError('FIREBASE_CREDENTIALS_BASE64 environment variable not found')
 
     if not FIREBASE_STORAGE_BUCKET:
         raise EnvironmentError('FIREBASE_STORAGE_BUCKET environment variable not found')
@@ -38,9 +38,9 @@ def process_pdf_from_id(pdf_id):
     credentials_gc = service_account.Credentials.from_service_account_info(service_account_info)
 
     # Initialize Firebase Admin SDK
-    firebase_creds_content = base64.b64decode(FIREBASE_CREDENTIALS_BASE64)
-    firebase_creds = json.loads(firebase_creds_content)
-    cred = credentials.Certificate(firebase_creds)
+    # firebase_creds_content = base64.b64decode(FIREBASE_CREDENTIALS_BASE64)
+    # firebase_creds = json.loads(firebase_creds_content)
+    cred = credentials.Certificate(service_account_info)
     if not firebase_admin._apps:
         firebase_admin.initialize_app(cred, {'storageBucket': FIREBASE_STORAGE_BUCKET})
 
@@ -50,20 +50,22 @@ def process_pdf_from_id(pdf_id):
     firebase_bucket = firebase_storage.bucket()
 
     # ---------------------- Retrieve PDF from Firebase Storage ----------------------
-    pdf_filename = f'class_pdfs/{pdf_id}'
-    pdf_blob = firebase_bucket.blob(pdf_filename)
-    if not pdf_blob.exists():
-        print(f"PDF with ID {pdf_filename} does not exist in Firebase Storage.")
-        return None
+    # pdf_filename = f'class_pdfs/{pdf_id}'
+    # pdf_blob = firebase_bucket.blob(pdf_filename)
+    # if not pdf_blob.exists():
+    #     print(f"PDF with ID {pdf_filename} does not exist in Firebase Storage.")
+    #     return None
 
-    pdf_content = pdf_blob.download_as_bytes()
-    print(f"Retrieved PDF from Firebase Storage: {pdf_filename}")
+    # pdf_content = pdf_blob.download_as_bytes()
+    # print(f"Retrieved PDF from Firebase Storage: {pdf_filename}")
 
-    # ---------------------- Upload PDF to Temporary Location in Firebase Storage ----------------------
-    temp_pdf_filename = f'temporary/{pdf_id}'
-    temp_pdf_blob = firebase_bucket.blob(temp_pdf_filename)
-    temp_pdf_blob.upload_from_string(pdf_content, content_type='application/pdf')
-    gcs_source_uri = f'gs://{FIREBASE_STORAGE_BUCKET}/{temp_pdf_filename}'
+    # # ---------------------- Upload PDF to Temporary Location in Firebase Storage ----------------------
+    # temp_pdf_filename = f'temporary/{pdf_id}'
+    # temp_pdf_blob = firebase_bucket.blob(temp_pdf_filename)
+    # temp_pdf_blob.upload_from_string(pdf_content, content_type='application/pdf')
+    # gcs_source_uri = f'gs://{FIREBASE_STORAGE_BUCKET}/{temp_pdf_filename}'
+    gcs_source_uri = f'gs://{FIREBASE_STORAGE_BUCKET}/class_pdfs/{pdf_id}'
+    
 
     print(f"Uploaded PDF to temporary location: {gcs_source_uri}")
 
@@ -131,7 +133,7 @@ Text to process:
 """
         # Send the structured prompt to the Gemini API and get the response
         response = genai.generate_text(
-            model="models/gemini-1.5-bison",
+            model="models/gemini-1.5-flash",
             prompt=prompt
         )
 
@@ -181,7 +183,7 @@ Ensure that the content flows naturally, is engaging, and clear. The script must
 """
         # Send the prompt to the Gemini API and get the response
         response = genai.generate_text(
-            model="models/gemini-1.5-bison",
+            model="models/gemini-1.5-flash",
             prompt=prompt
         )
 
@@ -218,7 +220,7 @@ Ensure that the content flows naturally, is engaging, and clear. The script must
         # Clean up temporary files in Firebase Storage
         print("Cleaning up temporary files in Firebase Storage.")
         # Delete the temporary uploaded PDF
-        temp_pdf_blob.delete()
+        # temp_pdf_blob.delete()
         # Delete OCR output files
         prefix = f'temporary/vision_output/{pdf_id}/'
         blobs = firebase_bucket.list_blobs(prefix=prefix)
