@@ -67,7 +67,7 @@ def process_pdf_from_id(pdf_id):
     gcs_source_uri = f'gs://{FIREBASE_STORAGE_BUCKET}/class_pdfs/{pdf_id}'
     
 
-    print(f"Uploaded PDF to temporary location: {gcs_source_uri}")
+    # print(f"Uploaded PDF to temporary location: {gcs_source_uri}")
 
     # ---------------------- Perform OCR ----------------------
     def detect_text_from_pdf(gcs_source_uri):
@@ -96,7 +96,7 @@ def process_pdf_from_id(pdf_id):
 
         # Wait for the operation to complete
         print('Waiting for the OCR operation to complete...')
-        response = operation.result(timeout=300)
+        # response = operation.result(timeout=300)
 
         # Return the output URI
         return output_uri
