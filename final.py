@@ -211,7 +211,7 @@ Ensure that the content flows naturally, and is engaging and clear. The script m
         response = model.generate_content(prompt)
 
         # Save the generated script to a file
-        with open(output_text_file, 'w') as file:
+        with open(output_text_file, 'w',encoding="utf-8") as file:
             file.write(response.text)
 
         print(f"Class script generated and saved to {output_text_file}.")
