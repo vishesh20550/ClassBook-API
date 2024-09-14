@@ -18,9 +18,16 @@ def process_pdf_from_url(pdf_url):
     # ---------------------- Configuration ----------------------
     # Set your API keys and credentials securely
     # Replace with your actual API key
-    with open('config.json', 'r') as file:
-        data = json.load(file)
-    GEMINI_API_KEY = data["gemini_key"]
+    # with open('config.json', 'r') as file:
+    #     data = json.load(file)
+    GEMINI_API_KEY = os.environ.get('GEMINI_KEY')
+    google_service_base64 = os.environ.get('GOOGLE_SERVICE_BASE64')
+    if google_service_base64:
+        google_service_content = base64.b64decode(google_service_base64).decode('utf-8')
+        with open('secret-helper-435208-s0-683d7868b041.json', 'w') as f:
+            f.write(google_service_content)
+    else:
+        raise EnvironmentError('GOOGLE_SERVICE_BASE64 environment variable not found')
 
     # Set the environment variable to the path of your Google Cloud service account key
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'secret-helper-435208-s0-683d7868b041.json'
