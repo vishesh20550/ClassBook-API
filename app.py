@@ -9,7 +9,7 @@ def convert_pdf():
     pdf_id = data['pdfId']
 
     # Call your model function to convert PDF to text
-    extracted_text = process_pdf_from_url(pdf_id)
+    script_id = process_pdf_from_url(pdf_id)
 
-    return jsonify({'script': extracted_text})
+    return jsonify({'script_id': script_id})
 
