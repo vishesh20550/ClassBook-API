@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from final import process_pdf_from_url
+from final import process_pdf_from_id
 
 app = Flask(__name__)
 
@@ -9,7 +9,7 @@ def convert_pdf():
     pdf_id = data['pdfId']
 
     # Call your model function to convert PDF to text
-    script_id = process_pdf_from_url(pdf_id)
+    script_id = process_pdf_from_id(pdf_id)
 
     return jsonify({'script_id': script_id})
 
