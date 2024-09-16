@@ -132,7 +132,7 @@ Text to process:
 {text_to_process}
 """
         # Send the structured prompt to the Gemini API and get the response
-        response = genai.generate_text(
+        response = genai.generate_content(
             model="models/gemini-1.5-flash",
             prompt=prompt
         )
@@ -182,7 +182,7 @@ Ensure that the content flows naturally, is engaging, and clear. The script must
 {text_to_process}
 """
         # Send the prompt to the Gemini API and get the response
-        response = genai.generate_text(
+        response = genai.generate_content(
             model="models/gemini-1.5-flash",
             prompt=prompt
         )
