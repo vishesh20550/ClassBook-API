@@ -96,7 +96,7 @@ def process_pdf_from_id(pdf_id):
 
         # Wait for the operation to complete
         print('Waiting for the OCR operation to complete...')
-        # response = operation.result(timeout=300)
+        response = operation.result(timeout=1000)
 
         # Return the output URI
         return output_uri
