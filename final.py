@@ -105,6 +105,7 @@ def process_pdf_from_id(pdf_id):
     def download_ocr_output(output_uri):
         # The output is written to JSON files in Firebase Storage
         # We'll download and parse it directly
+        print("OCR text download started.....")
         prefix = output_uri.replace(f'gs://{FIREBASE_STORAGE_BUCKET}/', '')
         blobs = firebase_bucket.list_blobs(prefix=prefix)
 
@@ -194,7 +195,7 @@ Ensure that the content flows naturally, is engaging, and clear. The script must
     try:
         # Perform OCR
         output_uri = detect_text_from_pdf(gcs_source_uri)
-
+        print("OCR operation completed")
         # Download OCR output
         ocr_text = download_ocr_output(output_uri)
 
